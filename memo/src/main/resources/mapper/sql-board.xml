@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.jeffworld.memo.mapper.MemberMapper">
+	<resultMap type="org.hdcd.dto.Member" id="memberMap">
+		<result property="email" column="email" />
+		<result property="name" column="name" />
+		<result property="password" column="password" />
+		<result property="enabled" column="enabled" />
+		
+		<collection property="authList" resultMap="authMap">
+		</collection>
+	</resultMap>
+
+	<resultMap type="com.jeffworld.memo.MemberAuth" id="authMap">
+		<result property="email" column="email" />
+		<result property="authority" column="authority" />
+	</resultMap>
+	
+	<select id="findUserByEmail" resultMap="memberMap">
+		SELECT mem.email,
+			   name,
+			   password,
+			   enabled,
+			   authority
+		  FROM member mem LEFT OUTER JOIN auth auth ON mem.email = auth.email
+		 WHERE mem.email = #{email}
+	</select>
+</mapper>
