@@ -37,10 +37,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		log.info("이메일 확인 : " + email);	
-		log.info("password 확인 : " + password);	
 		Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-
+		log.info("authentication토큰 객체 확인 " + authenticationToken);
 		return authenticationManager.authenticate(authenticationToken);
 	}
 	

@@ -11,12 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.jeffworld.memo.security.CustomNoOpPasswordEncoder;
 import com.jeffworld.memo.security.CustomUserDetailsService;
 import com.jeffworld.memo.security.jwt.filter.JwtAuthenticationFilter;
 import com.jeffworld.memo.security.jwt.filter.JwtAuthorizationFilter;
@@ -118,7 +118,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Bean
 	public PasswordEncoder createPasswordEncoder() {
 		//실제 암호화를 위해 들어가야할 값 return new BCryptPasswordEncoder();
-		return new CustomNoOpPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 	
 	//스프링 시큐리티의 UserDetailsService를 구현한 클래스를 빈으로 등록한다.

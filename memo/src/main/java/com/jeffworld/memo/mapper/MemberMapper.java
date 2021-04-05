@@ -7,6 +7,7 @@ import com.jeffworld.memo.dto.Member;
 @Mapper
 public interface MemberMapper {
 	Member findUserByEmail(String email);
-	void registerMember(Member member);
-	void registerAuthorization(String email);
+	int isDuplicated(String email);
+	int registerMember(Member member);
+	int registerAuthorization(String email);
 }
