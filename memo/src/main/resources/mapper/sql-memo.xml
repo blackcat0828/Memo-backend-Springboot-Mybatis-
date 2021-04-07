@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.jeffworld.memo.mapper.PersonalMemoMapper">
+	
+	<!-- 개인 메모 rsultMap -->
+	<resultMap type="com.jeffworld.memo.dto.PersonalBoard" id="boardMap">
+		<result property="pboardid" column="pboardid" />
+		<result property="title" column="title" />
+		<result property="owner" column="owner" />
+	</resultMap>
+
+	<resultMap type="com.jeffworld.memo.dto.PersonalMemo" id="memoMap">
+		<result property="id" column="id" />
+		<result property="title" column="title" />
+		<result property="contents" column="contents" />
+		<result property="boardId" column="boardId" />
+	</resultMap>
+	
+	<select id="findPersonalBoardByEmail" resultMap="boardMap">
+		SELECT pboardid, title, owner from personalBoard where owner = #{email};
+	</select>
+	
+	
+</mapper>
