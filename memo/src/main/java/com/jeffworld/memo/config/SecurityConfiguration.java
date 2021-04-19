@@ -61,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		.antMatchers("/auth/signin").permitAll()
 		.antMatchers("/auth/signup/**").permitAll()
-		.antMatchers("/**").hasAnyAuthority("ADMIN","USER")
+		.antMatchers("/**").hasAnyAuthority("ADMIN","MEMBER")
 		.antMatchers("/admin/**").hasAuthority("ADMIN");
 		
 //		
@@ -131,8 +131,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.addAllowedOrigin("*");
+	    configuration.addAllowedMethod("*");
+	    configuration.addAllowedHeader("*");
+	    configuration.setMaxAge(3600L);
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
+		source.registerCorsConfiguration("/**", configuration);
 		
 		
 		return source;

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jeffworld.memo.dto.PersonalBoard;
+import com.jeffworld.memo.dto.PersonalMemo;
 import com.jeffworld.memo.mapper.PersonalMemoMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,5 +21,39 @@ public class PersonalMemoServiceImpl {
 		log.info("서비스에 오는 email 값 : " + email);
 		List<PersonalBoard> boards = personalMemoMapper.findPersonalBoardByEmail(email);
 		return boards;
+	}
+	
+	public void addPersonalBoard(PersonalBoard board) {
+		personalMemoMapper.addPersonalBoard(board);
+	}
+	
+	public void updatePersonalBoard(PersonalBoard board) {
+		personalMemoMapper.updatePersonalBoard(board);
+	}
+	
+	public void deletePersonalBoard(int pboardid) {
+		personalMemoMapper.deletePersonalBoard(pboardid);
+	}
+	
+	public List<PersonalMemo> getPersonalMemos(int pboardid){
+		List<PersonalMemo> memos = personalMemoMapper.getPersonalMemos(pboardid);
+		return memos;
+	}
+	
+	public void addPersonalMemo(PersonalMemo Memo) {
+		personalMemoMapper.addPersonalMemo(Memo);
+	}
+	
+	public PersonalMemo getPersonalMemo(int memoId) {
+		PersonalMemo memo = personalMemoMapper.getPersonalMemo(memoId);
+		return memo;
+	}
+	
+	public void updatePersonalMemo(PersonalMemo Memo) {
+		personalMemoMapper.updatePersonalMemo(Memo);
+	}
+	
+	public void deletePersonalMemo(int memoId) {
+		personalMemoMapper.deletePersonalMemo(memoId);
 	}
 }

@@ -22,5 +22,41 @@
 		SELECT pboardid, title, owner from personalBoard where owner = #{email};
 	</select>
 	
+	<insert id="addPersonalBoard">
+		INSERT into personalBoard(title, owner) values(#{title}, #{owner})
+		<!-- LAST_INSERT_ID가 추가된 object를 반환 -->
+		<selectKey resultType="int" keyProperty="pboardid" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>   
+	</insert>
+	
+	<update id="updatePersonalBoard">
+		update personalBoard set title = #{title} where pboardid = #{pboardid}
+	</update>
+	
+	<delete id="deletePersonalBoard">
+		delete from personalBoard where pboardid = #{pboardid}
+	</delete>
+	
+	<select id="getPersonalMemos" resultType="com.jeffworld.memo.dto.PersonalMemo">
+		SELECT * from personalMemo where boardId = #{pboardid}
+	</select>
+	
+	<insert id="addPersonalMemo">
+		INSERT into personalMemo(title, contents, boardId) values(#{title}, #{contents}, #{boardId})
+		<!-- LAST_INSERT_ID가 추가된 object를 반환 --> 
+	</insert>
+	
+	<update id="updatePersonalMemo">
+		update personalMemo set title = #{title}, contents = #{contents} where id = #{id}
+	</update>
+	
+	<delete id="deletePersonalMemo">
+		delete from personalMemo where id = #{memoId}
+	</delete>
+	
+	<select id="getPersonalMemo" resultType="com.jeffworld.memo.dto.PersonalMemo">
+		SELECT * from personalMemo where id = #{memoId}
+	</select>
 	
 </mapper>

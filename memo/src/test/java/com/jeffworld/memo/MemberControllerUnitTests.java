@@ -36,7 +36,7 @@ public class MemberControllerUnitTests {
 	}
 	
 	//회원 중복 확인
-	@Test
+	@Ignore
 	public void isDuplicatedTest() throws Exception {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("email", "admin@test.com");
@@ -47,12 +47,12 @@ public class MemberControllerUnitTests {
 	
 	
 	//회원 가입 테스트
-	@Ignore
+	@Test
 	public void registerMemberTest() throws Exception {
 		JsonObject obj = new JsonObject();
-		obj.addProperty("email", "test3@test.com");
+		obj.addProperty("email", "admin@admin.com");
 		obj.addProperty("password", "1234");
-		obj.addProperty("name", "테스트3");
+		obj.addProperty("name", "김동민");
 		String json = gson.toJson(obj);
 		
 		mock.perform(post("/auth/signup").contentType(MediaType.APPLICATION_JSON)
