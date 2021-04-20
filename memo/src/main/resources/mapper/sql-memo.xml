@@ -46,6 +46,15 @@
 		select * from personalMemo where boardId = #{pboardid} order by id desc limit #{currentPage}, #{perPage};
 	</select>
 	
+	<select id="getPersonalMemosLengthWithTitle" parameterType="map" resultType="int">
+		SELECT count(id) from personalMemo where boardId = #{pboardid} and title Like '%' #{title} '%'
+	</select>
+	
+	<select id="getPersonalMemosWithTitle"  resultType="com.jeffworld.memo.dto.PersonalMemo">
+		select * from personalMemo where boardId = #{pboardid} and title Like '%' #{title} '%' order by id desc limit #{currentPage}, #{perPage};
+	</select>
+	
+	
 	<insert id="addPersonalMemo">
 		INSERT into personalMemo(title, contents, boardId) values(#{title}, #{contents}, #{boardId})
 		<!-- LAST_INSERT_ID가 추가된 object를 반환 --> 

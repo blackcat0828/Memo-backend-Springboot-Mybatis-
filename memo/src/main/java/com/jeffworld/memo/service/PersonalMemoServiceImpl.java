@@ -46,6 +46,16 @@ public class PersonalMemoServiceImpl {
 		return memos;
 	}
 	
+	public int getPersonalMemosLengthWithTitle(Criteria criteria){
+		int memosLength = personalMemoMapper.getPersonalMemosLengthWithTitle(criteria);
+		return memosLength;
+	}
+	
+	public List<PersonalMemo> getPersonalMemosWithTitle(Criteria criteria){
+		List<PersonalMemo> memos = personalMemoMapper.getPersonalMemosWithTitle(criteria);
+		return memos;
+	}
+	
 	public void addPersonalMemo(PersonalMemo Memo) {
 		personalMemoMapper.addPersonalMemo(Memo);
 	}

@@ -82,6 +82,40 @@ public class PersonalMemoController {
 		return new ResponseEntity<>(personalMemos, HttpStatus.OK);
 	}
 	
+	//제목으로 검색된 개인 메모 총 갯수 가져오기
+	@GetMapping("/boards/personal/{pboardid}/search/length")
+	public ResponseEntity<Object> getPersonalMemosLengthWithTitle(
+			@PathVariable("pboardid") int pboardid,
+			@RequestParam("Title") String Title
+			) throws Exception{
+			Criteria criteria = new Criteria();
+			criteria.setPboardid(pboardid);
+			criteria.setTitle(Title);
+			
+		log.info("메모 제목 갯수 테스트 " + Title);
+		int memoLength = personalMemoService.getPersonalMemosLengthWithTitle(criteria);
+		
+		return new ResponseEntity<>(memoLength, HttpStatus.OK);
+	}
+	
+	//제목으로 검색된 개인 메모 리스트 가져오기
+	@GetMapping("/boards/personal/{pboardid}/search")
+	public ResponseEntity<Object> getPersonalMemosWithTitle(
+			@PathVariable("pboardid") int pboardid,
+			@RequestParam("perPage") int perPage, 
+            @RequestParam("currentPage") int currentPage,
+            @RequestParam("Title") String Title) throws Exception{			
+			int curPage = (currentPage - 1) * 9;
+			Criteria criteria = new Criteria();
+			criteria.setCurrentPage(curPage);
+			criteria.setPboardid(pboardid);
+			criteria.setPerPage(perPage);
+			criteria.setTitle(Title);
+		List<PersonalMemo> personalMemos = personalMemoService.getPersonalMemosWithTitle(criteria);
+		
+		return new ResponseEntity<>(personalMemos, HttpStatus.OK);
+	}
+	
 	//개인 메모 추가
 	@PostMapping("/boards/personal/{pboardid}/memos")
 	public ResponseEntity<String> addPersonalMemo(@RequestBody PersonalMemo Memo, @PathVariable("pboardid") int pboardid){

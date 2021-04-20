@@ -74,6 +74,7 @@ private Gson gson = new Gson();
 		.content(json)).andDo(print()).andExpect(status().isOk());
 	}
 	
+	//개인 보드 삭제
 	@Ignore
 	public void deleteBoardTest() throws Exception {
 
@@ -83,6 +84,7 @@ private Gson gson = new Gson();
 	
 	}
 	
+	//메모 리스트 가져오기 Criteria 없음
 	@Ignore
 	public void getMemoList() throws Exception {
 
@@ -112,7 +114,7 @@ private Gson gson = new Gson();
 			obj.addProperty("title", "메모 추가 테스트"+i);
 			obj.addProperty("contents", "메모 추가 테스트"+i);
 			String json = gson.toJson(obj);
-		mock.perform(post("/boards/personal/2/memos").contentType(MediaType.APPLICATION_JSON)
+		mock.perform(post("/boards/personal/1/memos").contentType(MediaType.APPLICATION_JSON)
 		.content(json)).andDo(print()).andExpect(status().isCreated());
 		}
 	}
@@ -127,8 +129,28 @@ private Gson gson = new Gson();
 	
 	}
 	
-	//특정 메모 정보 가져오기
+	//제목으로 검색된 메모 갯수 가져오기
+	@Ignore
+	public void getMemoLengthWithTitleTest() throws Exception {
+		
+		
+		mock.perform(get("/boards/personal/1/search/length?Title=메모").contentType(MediaType.APPLICATION_JSON))
+		.andDo(print()).andExpect(status().isOk());
+	
+	}
+	
+	//제목으로 검색된 개인 메모 가져오기
 	@Test
+	public void getMemoListsWithTitleTest() throws Exception {
+		
+		
+		mock.perform(get("/boards/personal/1/search?Title=메모&&perPage=9&&currentPage=1").contentType(MediaType.APPLICATION_JSON))
+		.andDo(print()).andExpect(status().isOk());
+	
+	}
+	
+	//메모 리스트 가져오기
+	@Ignore
 	public void getMemoListsTest() throws Exception {
 
 		

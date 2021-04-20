@@ -17,6 +17,8 @@ public interface PersonalMemoMapper {
 	void deletePersonalBoard(int pboardid);
 	int getPersonalMemosLength(int pboardid);
 	List<PersonalMemo> getPersonalMemos(Criteria criteria);
+	int getPersonalMemosLengthWithTitle(Criteria criteria);
+	List<PersonalMemo> getPersonalMemosWithTitle(Criteria criteria);
 	void addPersonalMemo(PersonalMemo memo);
 	void updatePersonalMemo(PersonalMemo memo);
 	void deletePersonalMemo(int memoId);
