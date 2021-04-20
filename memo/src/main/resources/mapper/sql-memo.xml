@@ -38,8 +38,12 @@
 		delete from personalBoard where pboardid = #{pboardid}
 	</delete>
 	
-	<select id="getPersonalMemos" resultType="com.jeffworld.memo.dto.PersonalMemo">
-		SELECT * from personalMemo where boardId = #{pboardid}
+	<select id="getPersonalMemosLength" resultType="int">
+		SELECT count(id) from personalMemo where boardId = #{pboardid}
+	</select>
+	
+	<select id="getPersonalMemos" parameterType="int" resultType="com.jeffworld.memo.dto.PersonalMemo">
+		select * from personalMemo where boardId = #{pboardid} order by id desc limit #{currentPage}, #{perPage};
 	</select>
 	
 	<insert id="addPersonalMemo">

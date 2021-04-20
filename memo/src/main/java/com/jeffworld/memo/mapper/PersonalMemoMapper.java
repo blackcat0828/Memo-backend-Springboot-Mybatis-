@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.jeffworld.memo.dto.Criteria;
 import com.jeffworld.memo.dto.PersonalBoard;
 import com.jeffworld.memo.dto.PersonalMemo;
 
@@ -14,7 +15,8 @@ public interface PersonalMemoMapper {
 	void addPersonalBoard(PersonalBoard board);
 	void updatePersonalBoard(PersonalBoard board);
 	void deletePersonalBoard(int pboardid);
-	List<PersonalMemo> getPersonalMemos(int pboardid);
+	int getPersonalMemosLength(int pboardid);
+	List<PersonalMemo> getPersonalMemos(Criteria criteria);
 	void addPersonalMemo(PersonalMemo memo);
 	void updatePersonalMemo(PersonalMemo memo);
 	void deletePersonalMemo(int memoId);

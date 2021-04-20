@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jeffworld.memo.dto.Criteria;
 import com.jeffworld.memo.dto.PersonalBoard;
 import com.jeffworld.memo.dto.PersonalMemo;
 import com.jeffworld.memo.service.PersonalMemoServiceImpl;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonalMemoController {
 	@Autowired
 	PersonalMemoServiceImpl personalMemoService;
+
 	
 	@GetMapping("/boards/personal")
 	public ResponseEntity<Object> getBoardsList(@RequestParam String email) throws Exception{
@@ -54,10 +56,28 @@ public class PersonalMemoController {
 		return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
 	}
 	
+	//개인 메모 총 갯수 가져오기
+	@GetMapping("/boards/personal/{pboardid}/length")
+	public ResponseEntity<Object> getPersonalMemosLength(
+			@PathVariable("pboardid") int pboardid) throws Exception{
+			
+		int memoLength = personalMemoService.getPersonalMemosLength(pboardid);
+		
+		return new ResponseEntity<>(memoLength, HttpStatus.OK);
+	}
+	
 	//개인 메모 리스트 가져오기
 	@GetMapping("/boards/personal/{pboardid}")
-	public ResponseEntity<Object> getPersonalMemos(@PathVariable("pboardid") int pboardid) throws Exception{
-		List<PersonalMemo> personalMemos = personalMemoService.getPersonalMemos(pboardid);
+	public ResponseEntity<Object> getPersonalMemos(
+			@PathVariable("pboardid") int pboardid,
+			@RequestParam("perPage") int perPage, 
+            @RequestParam("currentPage") int currentPage) throws Exception{			
+			int curPage = (currentPage - 1) * 9;
+			Criteria criteria = new Criteria();
+			criteria.setCurrentPage(curPage);
+			criteria.setPboardid(pboardid);
+			criteria.setPerPage(perPage);
+		List<PersonalMemo> personalMemos = personalMemoService.getPersonalMemos(criteria);
 		
 		return new ResponseEntity<>(personalMemos, HttpStatus.OK);
 	}

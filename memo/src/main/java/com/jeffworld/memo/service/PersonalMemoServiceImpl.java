@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jeffworld.memo.dto.Criteria;
 import com.jeffworld.memo.dto.PersonalBoard;
 import com.jeffworld.memo.dto.PersonalMemo;
 import com.jeffworld.memo.mapper.PersonalMemoMapper;
@@ -35,8 +36,13 @@ public class PersonalMemoServiceImpl {
 		personalMemoMapper.deletePersonalBoard(pboardid);
 	}
 	
-	public List<PersonalMemo> getPersonalMemos(int pboardid){
-		List<PersonalMemo> memos = personalMemoMapper.getPersonalMemos(pboardid);
+	public int getPersonalMemosLength(int pboardid){
+		int memosLength = personalMemoMapper.getPersonalMemosLength(pboardid);
+		return memosLength;
+	}
+	
+	public List<PersonalMemo> getPersonalMemos(Criteria criteria){
+		List<PersonalMemo> memos = personalMemoMapper.getPersonalMemos(criteria);
 		return memos;
 	}
 	

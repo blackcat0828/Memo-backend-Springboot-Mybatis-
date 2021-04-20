@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Iterator;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -102,8 +104,41 @@ private Gson gson = new Gson();
 		.content(json)).andDo(print()).andExpect(status().isCreated());
 	}
 	
-	//특정 메모 가져오기
+	//메모 대량 생성
+	@Ignore
+	public void addPersonalMemoMany() throws Exception {
+			JsonObject obj = new JsonObject();
+		for(int i = 0; i<100; i++) {
+			obj.addProperty("title", "메모 추가 테스트"+i);
+			obj.addProperty("contents", "메모 추가 테스트"+i);
+			String json = gson.toJson(obj);
+		mock.perform(post("/boards/personal/2/memos").contentType(MediaType.APPLICATION_JSON)
+		.content(json)).andDo(print()).andExpect(status().isCreated());
+		}
+	}
+	
+	//메모 갯수 가져오기
+	@Ignore
+	public void getMemoLengthTest() throws Exception {
+		
+		
+		mock.perform(get("/boards/personal/2/length").contentType(MediaType.APPLICATION_JSON))
+		.andDo(print()).andExpect(status().isOk());
+	
+	}
+	
+	//특정 메모 정보 가져오기
 	@Test
+	public void getMemoListsTest() throws Exception {
+
+		
+		mock.perform(get("/boards/personal/2?perPage=9&&currentPage=2").contentType(MediaType.APPLICATION_JSON))
+		.andDo(print()).andExpect(status().isOk());
+	
+	}
+	
+	//특정 메모 정보 가져오기
+	@Ignore
 	public void getMemoTest() throws Exception {
 
 		
@@ -112,7 +147,7 @@ private Gson gson = new Gson();
 	
 	}
 	
-	//메모 Update
+	//메모 수정
 	@Ignore
 	public void updateMemoTest() throws Exception {
 		JsonObject obj = new JsonObject();
@@ -124,6 +159,7 @@ private Gson gson = new Gson();
 		.content(json)).andDo(print()).andExpect(status().isOk());
 	}
 	
+	//메모 삭제
 	@Ignore
 	public void deleteMemoTest() throws Exception {
 
