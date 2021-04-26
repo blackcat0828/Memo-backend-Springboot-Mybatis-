@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jeffworld.memo.dto.BoardMember;
 import com.jeffworld.memo.dto.Criteria;
 import com.jeffworld.memo.dto.PersonalBoard;
 import com.jeffworld.memo.dto.PersonalMemo;
@@ -19,8 +20,12 @@ public class PersonalMemoServiceImpl {
 	private PersonalMemoMapper personalMemoMapper;
 	
 	public List<PersonalBoard> findPersonalBoardByEmail(String email){
-		log.info("서비스에 오는 email 값 : " + email);
 		List<PersonalBoard> boards = personalMemoMapper.findPersonalBoardByEmail(email);
+		return boards;
+	}
+	
+	public List<PersonalBoard> findTeamBoardByEmail(String email){
+		List<PersonalBoard> boards = personalMemoMapper.findTeamBoardByEmail(email);
 		return boards;
 	}
 	
@@ -71,5 +76,13 @@ public class PersonalMemoServiceImpl {
 	
 	public void deletePersonalMemo(int memoId) {
 		personalMemoMapper.deletePersonalMemo(memoId);
+	}
+	
+	public void addBoardMember(BoardMember boardMember) {
+		personalMemoMapper.addBoardMember(boardMember);
+	}
+	
+	public void deleteBoardMember(BoardMember boardMember) {
+		personalMemoMapper.deleteBoardMember(boardMember);
 	}
 }

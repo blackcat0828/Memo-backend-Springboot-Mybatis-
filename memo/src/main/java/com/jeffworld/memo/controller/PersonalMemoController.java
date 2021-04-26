@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jeffworld.memo.dto.BoardMember;
 import com.jeffworld.memo.dto.Criteria;
 import com.jeffworld.memo.dto.PersonalBoard;
 import com.jeffworld.memo.dto.PersonalMemo;
@@ -27,14 +28,23 @@ public class PersonalMemoController {
 	@Autowired
 	PersonalMemoServiceImpl personalMemoService;
 
-	
+	//내가 주인인 보드 목록 가져오기
 	@GetMapping("/boards/personal")
 	public ResponseEntity<Object> getBoardsList(@RequestParam String email) throws Exception{
-		log.info("PersonalMemoController boards리스트 get 실행");
 		List<PersonalBoard> personalBoard = personalMemoService.findPersonalBoardByEmail(email);
 		
 		return new ResponseEntity<>(personalBoard, HttpStatus.OK);
 	}
+	
+	//내가 맴버인 보드 목록 가져오기
+	@GetMapping("/boards/member")
+	public ResponseEntity<Object> getTeamBoardsList(@RequestParam String email) throws Exception{
+		List<PersonalBoard> teamBoard = personalMemoService.findTeamBoardByEmail(email);
+		
+		return new ResponseEntity<>(teamBoard, HttpStatus.OK);
+	}
+	
+	
 	
 	@PostMapping("/boards/personal")
 	public ResponseEntity<Object> addPersonalBoards(@RequestBody PersonalBoard board){
@@ -72,7 +82,7 @@ public class PersonalMemoController {
 			@PathVariable("pboardid") int pboardid,
 			@RequestParam("perPage") int perPage, 
             @RequestParam("currentPage") int currentPage) throws Exception{			
-			int curPage = (currentPage - 1) * 9;
+			int curPage = (currentPage - 1) * 4;
 			Criteria criteria = new Criteria();
 			criteria.setCurrentPage(curPage);
 			criteria.setPboardid(pboardid);
@@ -86,13 +96,12 @@ public class PersonalMemoController {
 	@GetMapping("/boards/personal/{pboardid}/search/length")
 	public ResponseEntity<Object> getPersonalMemosLengthWithTitle(
 			@PathVariable("pboardid") int pboardid,
-			@RequestParam("Title") String Title
+			@RequestParam("title") String Title
 			) throws Exception{
 			Criteria criteria = new Criteria();
 			criteria.setPboardid(pboardid);
 			criteria.setTitle(Title);
 			
-		log.info("메모 제목 갯수 테스트 " + Title);
 		int memoLength = personalMemoService.getPersonalMemosLengthWithTitle(criteria);
 		
 		return new ResponseEntity<>(memoLength, HttpStatus.OK);
@@ -104,8 +113,8 @@ public class PersonalMemoController {
 			@PathVariable("pboardid") int pboardid,
 			@RequestParam("perPage") int perPage, 
             @RequestParam("currentPage") int currentPage,
-            @RequestParam("Title") String Title) throws Exception{			
-			int curPage = (currentPage - 1) * 9;
+            @RequestParam("title") String Title) throws Exception{			
+			int curPage = (currentPage - 1) * 4;
 			Criteria criteria = new Criteria();
 			criteria.setCurrentPage(curPage);
 			criteria.setPboardid(pboardid);
@@ -140,9 +149,29 @@ public class PersonalMemoController {
 		return new ResponseEntity<>("수정 완료", HttpStatus.OK);
 	}
 	
+	//메모 삭제
 	@DeleteMapping("/boards/personal/{pboardid}/memos/{memoId}")
-	public ResponseEntity<String> DeletePersonalMemo(@PathVariable("memoId") int memoId){
+	public ResponseEntity<String> deletePersonalMemo(@PathVariable("memoId") int memoId){
 		personalMemoService.deletePersonalMemo(memoId);
+		return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
+	}
+	
+	//메모장 멤버 추가
+	@PostMapping("/boards/personal/{pboardid}/member")
+	public ResponseEntity<String> addPersonalMemo(@PathVariable("pboardid") int pboardid, @RequestBody BoardMember boardMember){
+		boardMember.setPboardid(pboardid);
+		personalMemoService.addBoardMember(boardMember);
+		return new ResponseEntity<>("등록 완료", HttpStatus.CREATED);
+	}
+
+	
+	//메모장 맴버 삭제
+	@DeleteMapping("/boards/personal/{pboardid}/member")
+	public ResponseEntity<String> deleteBoardMember(@PathVariable("pboardid") int pboardid, @RequestParam String boardMember){
+		BoardMember member = new BoardMember();
+		member.setPboardid(pboardid);
+		member.setBoardMember(boardMember);
+		personalMemoService.deleteBoardMember(member);
 		return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
 	}
 }

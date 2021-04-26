@@ -11,6 +11,7 @@ public class PersonalMemo {
 	private int id;
 	private String title;
 	private String contents;
+	private String creator;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime date;
 	private int boardId;

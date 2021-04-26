@@ -9,17 +9,34 @@
 		<result property="pboardid" column="pboardid" />
 		<result property="title" column="title" />
 		<result property="owner" column="owner" />
+		<collection property="memberList" resultMap="boardMemberMap">
+		</collection>
 	</resultMap>
 
-	<resultMap type="com.jeffworld.memo.dto.PersonalMemo" id="memoMap">
-		<result property="id" column="id" />
-		<result property="title" column="title" />
-		<result property="contents" column="contents" />
-		<result property="boardId" column="boardId" />
+
+
+	<resultMap type="com.jeffworld.memo.dto.BoardMember" id="boardMemberMap">
+		<result property="boardMember" column="boardMember" />
 	</resultMap>
 	
+	<!-- 내가 오너인 보드 정보 -->
 	<select id="findPersonalBoardByEmail" resultMap="boardMap">
-		SELECT pboardid, title, owner from personalBoard where owner = #{email};
+		SELECT b.pboardid,
+			   title,
+			   owner,
+			   m.boardMember
+		  FROM personalBoard b LEFT OUTER JOIN boardMember m ON b.pboardid = m.pboardid
+		  WHERE b.owner = #{email};
+	</select>
+	
+	<select id="findTeamBoardByEmail" resultMap="boardMap">
+		SELECT b.pboardid,
+			   title,
+			   owner,
+			   m.boardMember
+		  FROM personalBoard b RIGHT OUTER JOIN 
+		  (select * from boardMember where pboardid in (select pboardid from boardMember where boardMember = #{email})) m 
+		  ON b.pboardid = m.pboardid;
 	</select>
 	
 	<insert id="addPersonalBoard">
@@ -56,7 +73,7 @@
 	
 	
 	<insert id="addPersonalMemo">
-		INSERT into personalMemo(title, contents, boardId) values(#{title}, #{contents}, #{boardId})
+		INSERT into personalMemo(title, contents, creator, boardId) values(#{title}, #{contents}, #{creator}, #{boardId})
 		<!-- LAST_INSERT_ID가 추가된 object를 반환 --> 
 	</insert>
 	
@@ -71,5 +88,13 @@
 	<select id="getPersonalMemo" resultType="com.jeffworld.memo.dto.PersonalMemo">
 		SELECT * from personalMemo where id = #{memoId}
 	</select>
+	
+	<insert id="addBoardMember">
+		INSERT into boardMember(pboardid, boardMember) values(#{pboardid}, #{boardMember})
+	</insert>
+	
+	<delete id="deleteBoardMember">
+		delete from boardMember where pboardid = #{pboardid} and boardMember = #{boardMember}
+	</delete>
 	
 </mapper>

@@ -5,10 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Iterator;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -42,10 +39,19 @@ private Gson gson = new Gson();
 		mock = MockMvcBuilders.standaloneSetup(personalMemoController).build();
 	}
 	
-	//보드 카테고리 리스트 확인 - RequestParam으로 바꿧음으로 추후 테스트 메소드 수정
+	//내가 주인인 보드 리스트 확인
 	@Ignore
 	public void getBoardList() throws Exception {
 		mock.perform(get("/boards/personal").contentType(MediaType.APPLICATION_JSON).param("email", "admin@admin.com"))
+		.andDo(print())
+		.andExpect(status().isOk());
+		
+	}
+	
+	//내가 맴버인 보드 리스트 확인
+	@Ignore
+	public void getTeamBoardList() throws Exception {
+		mock.perform(get("/boards/member").contentType(MediaType.APPLICATION_JSON).param("email", "member@member.com"))
 		.andDo(print())
 		.andExpect(status().isOk());
 		
@@ -111,10 +117,11 @@ private Gson gson = new Gson();
 	public void addPersonalMemoMany() throws Exception {
 			JsonObject obj = new JsonObject();
 		for(int i = 0; i<100; i++) {
-			obj.addProperty("title", "메모 추가 테스트"+i);
-			obj.addProperty("contents", "메모 추가 테스트"+i);
+			obj.addProperty("title", "검색 테스트"+i);
+			obj.addProperty("contents", "검색 테스트"+i);
+			obj.addProperty("creator", "admin@admin.com");
 			String json = gson.toJson(obj);
-		mock.perform(post("/boards/personal/1/memos").contentType(MediaType.APPLICATION_JSON)
+		mock.perform(post("/boards/personal/2/memos").contentType(MediaType.APPLICATION_JSON)
 		.content(json)).andDo(print()).andExpect(status().isCreated());
 		}
 	}
@@ -134,17 +141,17 @@ private Gson gson = new Gson();
 	public void getMemoLengthWithTitleTest() throws Exception {
 		
 		
-		mock.perform(get("/boards/personal/1/search/length?Title=메모").contentType(MediaType.APPLICATION_JSON))
+		mock.perform(get("/boards/personal/1/search/length?title=메모").contentType(MediaType.APPLICATION_JSON))
 		.andDo(print()).andExpect(status().isOk());
 	
 	}
 	
 	//제목으로 검색된 개인 메모 가져오기
-	@Test
+	@Ignore
 	public void getMemoListsWithTitleTest() throws Exception {
 		
 		
-		mock.perform(get("/boards/personal/1/search?Title=메모&&perPage=9&&currentPage=1").contentType(MediaType.APPLICATION_JSON))
+		mock.perform(get("/boards/personal/2/search?title=검색&&perPage=9&&currentPage=1").contentType(MediaType.APPLICATION_JSON))
 		.andDo(print()).andExpect(status().isOk());
 	
 	}
@@ -187,6 +194,29 @@ private Gson gson = new Gson();
 
 		
 		mock.perform(delete("/boards/personal/2/memos/2").contentType(MediaType.APPLICATION_JSON))
+		.andDo(print()).andExpect(status().isOk());
+	
+	}
+	
+	//보드 맴버 추가
+	@Test
+	public void addBoardMemberTest() throws Exception {
+		JsonObject obj = new JsonObject();
+		obj.addProperty("boardMember", "test2@test.com");
+
+		String json = gson.toJson(obj);
+		
+		mock.perform(post("/boards/personal/2/member").contentType(MediaType.APPLICATION_JSON).content(json))
+		.andDo(print()).andExpect(status().isCreated());
+	
+	}
+	
+	//보드 맴버 삭제
+	@Ignore
+	public void deleteBoardMemberTest() throws Exception {
+
+		
+		mock.perform(delete("/boards/personal/2/member").contentType(MediaType.APPLICATION_JSON).param("email", "member@member.com"))
 		.andDo(print()).andExpect(status().isOk());
 	
 	}
