@@ -38,21 +38,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+		//HTTP request에 요청으로 온 값을 사용하여  UserPasswordAuthenticationToken을 생성
 		Authentication authentication = getAuthentication(request);
 		String header = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
+		
 		if (isEmpty(header) || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
-
+		
+		//URL 접근 제한을 위한 Authority를 설정해주기위해 SecurityContextHolder에 Authentication 객체 저장
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
 	}
 	
 	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-		log.info("권한 인가 테스트 " );
-		log.info("헤더 정보 보기" + request.getHeader("Authorization"));
+
 		String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
 		if (isNotEmpty(token)) {
 			try {
@@ -62,19 +63,16 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 						.setSigningKey(signingKey)
 						.parseClaimsJws(token.replace("Bearer ", ""));
 				
-				log.info("토큰파서중 제대로 값이 들어오나 트림으로? : ");
 				String username = parsedToken
 						.getBody()
 						.getSubject();
 				
-				log.info("요청시 들어오는 email 확인 : " + username);
 
 				List<SimpleGrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
 						.get("rol"))
 						.stream()
 						.map(authority -> new SimpleGrantedAuthority((String) authority))
 						.collect(Collectors.toList());
-				log.info("토큰 파서중 권한 테스트 : " + authorities);
 				
 				if (isNotEmpty(username)) {
 					return new UsernamePasswordAuthenticationToken(username, null, authorities);

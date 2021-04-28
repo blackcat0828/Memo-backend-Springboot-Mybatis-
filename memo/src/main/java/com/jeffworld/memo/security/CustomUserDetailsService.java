@@ -22,7 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService{
 		
 		//userName은 사용자명이 아니라 사용자 아이디를 의미한다.
 		Member member = memberService.findUserByEmail(email);
-		log.info("queried by member mapper: " + member);
 
 		return member == null ? null : new CustomUser(member);
 	}

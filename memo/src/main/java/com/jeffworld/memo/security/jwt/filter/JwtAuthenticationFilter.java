@@ -30,6 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	
 	public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
+		//지정된 URL로 요청이 들어오면 해당 JWT 발급용 Authentication Filter동작
 		setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
 	}
 	
@@ -38,10 +39,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-		log.info("authentication토큰 객체 확인 " + authenticationToken);
 		return authenticationManager.authenticate(authenticationToken);
 	}
 	
+	//인증에 성공후 JWT을 생성해 Client에게 response한다.
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, 
 			FilterChain filterChain, Authentication authentication) throws IOException {
@@ -62,8 +63,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.compact();
 		
 		
-		//response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + accessToken);
-		log.info("생성된 토큰 정보" + accessToken);
 		
 		response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
