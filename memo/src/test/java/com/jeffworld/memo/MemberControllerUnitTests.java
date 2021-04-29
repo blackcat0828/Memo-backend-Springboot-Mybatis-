@@ -3,15 +3,13 @@ package com.jeffworld.memo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -19,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jeffworld.memo.controller.MemberRestController;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MemberControllerUnitTests {
@@ -30,13 +28,13 @@ public class MemberControllerUnitTests {
 	
 	private MockMvc mock;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception{
 		mock = MockMvcBuilders.standaloneSetup(memberRestController).build();
 	}
 	
 	//회원 중복 확인
-	@Ignore
+	@Disabled
 	public void isDuplicatedTest() throws Exception {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("email", "admin@test.com");
@@ -50,9 +48,9 @@ public class MemberControllerUnitTests {
 	@Test
 	public void registerMemberTest() throws Exception {
 		JsonObject obj = new JsonObject();
-		obj.addProperty("email", "admin@admin.com");
+		obj.addProperty("email", "member@member.com");
 		obj.addProperty("password", "1234");
-		obj.addProperty("name", "김동민");
+		obj.addProperty("name", "멤버1");
 		String json = gson.toJson(obj);
 		
 		mock.perform(post("/auth/signup").contentType(MediaType.APPLICATION_JSON)

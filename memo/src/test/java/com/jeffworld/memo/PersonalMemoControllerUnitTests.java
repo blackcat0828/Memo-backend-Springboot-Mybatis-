@@ -7,15 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -23,7 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jeffworld.memo.controller.PersonalMemoController;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PersonalMemoControllerUnitTests {
@@ -34,13 +31,13 @@ private Gson gson = new Gson();
 	
 	private MockMvc mock;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception{
 		mock = MockMvcBuilders.standaloneSetup(personalMemoController).build();
 	}
 	
 	//내가 주인인 보드 리스트 확인
-	@Ignore
+	@Disabled
 	public void getBoardList() throws Exception {
 		mock.perform(get("/boards/personal").contentType(MediaType.APPLICATION_JSON).param("email", "admin@admin.com"))
 		.andDo(print())
@@ -49,7 +46,7 @@ private Gson gson = new Gson();
 	}
 	
 	//내가 맴버인 보드 리스트 확인
-	@Ignore
+	@Disabled
 	public void getTeamBoardList() throws Exception {
 		mock.perform(get("/boards/member").contentType(MediaType.APPLICATION_JSON).param("email", "member@member.com"))
 		.andDo(print())
@@ -58,7 +55,7 @@ private Gson gson = new Gson();
 	}
 	
 	//메모장 추가 테스트
-	@Ignore
+	@Disabled
 	public void registerBoardTest() throws Exception {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("owner", "admin@admin.com");
@@ -70,7 +67,7 @@ private Gson gson = new Gson();
 	}
 	
 	//보드 제목 변경
-	@Ignore
+	@Disabled
 	public void updateBoardTest() throws Exception {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("title", "수정 테스트1");
@@ -81,7 +78,7 @@ private Gson gson = new Gson();
 	}
 	
 	//개인 보드 삭제
-	@Ignore
+	@Disabled
 	public void deleteBoardTest() throws Exception {
 
 		
@@ -91,7 +88,7 @@ private Gson gson = new Gson();
 	}
 	
 	//메모 리스트 가져오기 Criteria 없음
-	@Ignore
+	@Disabled
 	public void getMemoList() throws Exception {
 
 		mock.perform(get("/boards/personal/2").contentType(MediaType.APPLICATION_JSON))
@@ -101,7 +98,7 @@ private Gson gson = new Gson();
 	}
 	
 	//메모 추가 테스트
-	@Ignore
+	@Disabled
 	public void addPersonalMemoTest() throws Exception {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("title", "메모 추가 테스트");
@@ -113,21 +110,21 @@ private Gson gson = new Gson();
 	}
 	
 	//메모 대량 생성
-	@Ignore
-	public void addPersonalMemoMany() throws Exception {
-			JsonObject obj = new JsonObject();
-		for(int i = 0; i<100; i++) {
-			obj.addProperty("title", "검색 테스트"+i);
-			obj.addProperty("contents", "검색 테스트"+i);
-			obj.addProperty("creator", "admin@admin.com");
-			String json = gson.toJson(obj);
-		mock.perform(post("/boards/personal/2/memos").contentType(MediaType.APPLICATION_JSON)
-		.content(json)).andDo(print()).andExpect(status().isCreated());
-		}
-	}
+//	@Disabled
+//	public void addPersonalMemoMany() throws Exception {
+//			JsonObject obj = new JsonObject();
+//		for(int i = 0; i<100; i++) {
+//			obj.addProperty("title", "검색 테스트"+i);
+//			obj.addProperty("contents", "검색 테스트"+i);
+//			obj.addProperty("creator", "admin@admin.com");
+//			String json = gson.toJson(obj);
+//		mock.perform(post("/boards/personal/2/memos").contentType(MediaType.APPLICATION_JSON)
+//		.content(json)).andDo(print()).andExpect(status().isCreated());
+//		}
+//	}
 	
 	//메모 갯수 가져오기
-	@Ignore
+	@Disabled
 	public void getMemoLengthTest() throws Exception {
 		
 		
@@ -137,7 +134,7 @@ private Gson gson = new Gson();
 	}
 	
 	//제목으로 검색된 메모 갯수 가져오기
-	@Ignore
+	@Disabled
 	public void getMemoLengthWithTitleTest() throws Exception {
 		
 		
@@ -147,7 +144,7 @@ private Gson gson = new Gson();
 	}
 	
 	//제목으로 검색된 개인 메모 가져오기
-	@Ignore
+	@Disabled
 	public void getMemoListsWithTitleTest() throws Exception {
 		
 		
@@ -157,7 +154,7 @@ private Gson gson = new Gson();
 	}
 	
 	//메모 리스트 가져오기
-	@Ignore
+	@Disabled
 	public void getMemoListsTest() throws Exception {
 
 		
@@ -167,7 +164,7 @@ private Gson gson = new Gson();
 	}
 	
 	//특정 메모 정보 가져오기
-	@Ignore
+	@Disabled
 	public void getMemoTest() throws Exception {
 
 		
@@ -177,7 +174,7 @@ private Gson gson = new Gson();
 	}
 	
 	//메모 수정
-	@Ignore
+	@Disabled
 	public void updateMemoTest() throws Exception {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("title", "메모 수정 테스트1");
@@ -189,7 +186,7 @@ private Gson gson = new Gson();
 	}
 	
 	//메모 삭제
-	@Ignore
+	@Disabled
 	public void deleteMemoTest() throws Exception {
 
 		
@@ -199,7 +196,7 @@ private Gson gson = new Gson();
 	}
 	
 	//보드 맴버 추가
-	@Test
+	@Disabled
 	public void addBoardMemberTest() throws Exception {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("boardMember", "test2@test.com");
@@ -212,7 +209,7 @@ private Gson gson = new Gson();
 	}
 	
 	//보드 맴버 삭제
-	@Ignore
+	@Disabled
 	public void deleteBoardMemberTest() throws Exception {
 
 		
